@@ -7,6 +7,7 @@ const ReadMoreCard = ({viewCount, publishedAt, description}) => {
     setIsReadMore(false)
   }, [])
 
+  console.log(description.length);
 
   return (
     <div className='w-half bg-gray-100 my-8 p-3 rounded-xl'>
@@ -14,14 +15,14 @@ const ReadMoreCard = ({viewCount, publishedAt, description}) => {
             <p>{viewCount} views</p>
             <p>{publishedAt}</p>
         </div>
-        {
-          <p className={`py-4 whitespace-pre-line ${!isReadMore && description.length > 300 && "leading-5 h-32 overflow-hidden line-clamp-5"}`}>
+        
+          <p className={`py-4 whitespace-pre-line ${!isReadMore && description?.length > 300 && "leading-5 h-32 overflow-hidden line-clamp-5"}`}>
           {description}
         </p>
-        }
+        
         
         { 
-         description.length > 300 && <button className="px-3 py-1 border border-gray-500 rounded-lg font-bold" onClick={() => setIsReadMore(!isReadMore)}>{!isReadMore ? "Show More" : "Show less"}</button>
+         description?.length > 300 && <button className="px-3 py-1 border border-gray-500 rounded-lg font-bold" onClick={() => setIsReadMore(!isReadMore)}>{!isReadMore ? "Show More" : "Show less"}</button>
         }
     </div>
   )

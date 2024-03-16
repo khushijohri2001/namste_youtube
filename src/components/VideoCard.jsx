@@ -7,6 +7,8 @@ const VideoCard = ({ info }) => {
   const [videoDetails, setVideoDetails] = useState([]);
   const [viewCount, setViewCount] = useState();
   const isMenuOpen = useSelector((store) => store.menu.isMenuOpen);
+  
+
 
   const { snippet, id } = info;
   const { title, channelTitle, thumbnails, liveBroadcastContent } = snippet;
@@ -26,7 +28,6 @@ const VideoCard = ({ info }) => {
   }, []);
 
   
-
   return (
     <Link
       key={video_id}

@@ -9,10 +9,12 @@ import { allFilterVideosHandler, allVideosHandler } from "../redux/videoSlice";
 const VideoContainer = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  
 
   // const activeButton  = useSelector((store) => store.buttonFilter.activeButton);
   const allVideos = useSelector((store) => store.videos.allVideos);
   const allFilterVideos = useSelector((store) => store.videos.allFilterVideos);
+  
 
   useEffect(() => {
     try {
@@ -39,7 +41,7 @@ const VideoContainer = () => {
           {allFilterVideos?.length === 0 ? (
             <h1>No Videos Found</h1>
           ) : (
-            allFilterVideos.map((video) => <div key={video.id}> <VideoCard info={video} /> </div>)
+            allFilterVideos.map((video) => <div key={video.etag}> <VideoCard info={video} /> </div>)
           )}
         </div>
       )}

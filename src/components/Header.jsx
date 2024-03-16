@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { menuToggle } from "../redux/sideSlice";
-import { YOUTUBE_CATEGORY_VIDEO_API, YOUTUBE_SUGGESTION_API } from "../utils/data/youtube-api";
+import {
+  YOUTUBE_CATEGORY_VIDEO_API,
+  YOUTUBE_SUGGESTION_API,
+} from "../utils/data/youtube-api";
 import { cacheResult } from "../redux/searchSlice";
 import { Link } from "react-router-dom";
-import { filterData } from "../utils/functions/filterData";
+import { searchFilterData } from "../utils/functions/searchFilterData";
 import { allFilterVideosHandler } from "../redux/videoSlice";
 
 const Header = () => {
@@ -14,22 +17,18 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const searchCache = useSelector((store) => store.search);
-  const allVideos = useSelector((store) => store.search.allVideos);
-  
+  const allVideos = useSelector((store) => store.videos.allVideos);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchCache[searchQuery]) {
-       
-          setSuggestionList(searchCache[searchQuery]);
-
-        
+        setSuggestionList(searchCache[searchQuery]);
       } else {
         fetchSuggestionsHandler();
       }
 
-      if(searchQuery === ""){
-        fetchSuggestionsHandler()
+      if (searchQuery === "") {
+        fetchSuggestionsHandler();
       }
     }, 200);
 
@@ -59,11 +58,21 @@ const Header = () => {
     handleBlur();
   };
 
-  const getVideosByCategory = async(activeButton) => {
+  const getVideosByCategory = async (activeButton) => {
     const res = await fetch(YOUTUBE_CATEGORY_VIDEO_API(activeButton));
-    const data = await res.json()
-    dispatch(allFilterVideosHandler(data.items))
-  }
+    const data = await res.json();
+    dispatch(allFilterVideosHandler(data.items));
+  };
+
+  const searchHandler = (searchQuery) => {
+    const data = searchFilterData(searchQuery, allVideos);
+    if (data.length === 0) {
+      getVideosByCategory(searchQuery);
+    } else {
+      dispatch(allFilterVideosHandler(data));
+    }
+    setIsSuggestionOpen(false);
+  };
 
   return (
     <div className=" sticky top-0 bg-white  flex gap-3 justify-between shadow-md p-4 items-center z-50">
@@ -88,9 +97,7 @@ const Header = () => {
           className=" relative "
           onSubmit={(e) => {
             e.preventDefault();
-            const data = filterData(searchQuery, allVideos);
-            dispatch(allFilterVideosHandler(data));
-            setIsSuggestionOpen(false)
+            searchHandler(searchQuery)
           }}
         >
           <input
@@ -120,7 +127,7 @@ const Header = () => {
 
         <button
           className="bg-gray-300 border border-slate-600 p-1 px-3 rounded-r-3xl text-lg "
-          onClick={() => getVideosByCategory(searchQuery)}
+          onClick={() => searchHandler(searchQuery)}
         >
           🔍
         </button>
@@ -132,7 +139,6 @@ const Header = () => {
           />
         </button>
       </div>
-
 
       <div className=" flex gap-3">
         <button className=" p-1 max-sm:hidden">
@@ -150,18 +156,15 @@ const Header = () => {
           />
         </button>
 
-        
-          <Link to="/login">
-        <button className="p-2 border-2 border-black rounded-3xl">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/709/709722.png"
-            alt="user icon"
-            className="h-5"
-          />
-        </button>
+        <Link to="/login">
+          <button className="p-2 border-2 border-black rounded-3xl">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/709/709722.png"
+              alt="user icon"
+              className="h-5"
+            />
+          </button>
         </Link>
-     
-        
       </div>
     </div>
   );

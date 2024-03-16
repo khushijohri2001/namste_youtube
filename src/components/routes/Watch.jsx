@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import CommentContainer from "../CommentContainer";
 import LiveChat from "../LiveChat";
 import LoadMoreCard from "../ReadMoreCard";
@@ -8,26 +8,48 @@ import { closeMenu } from "../../redux/sideSlice";
 import numeral from "numeral";
 import { dislikeCountHandler, dislikeToggle, likeCountHandler, likeToggle } from "../../redux/likeDislikeSlice";
 import RecommendedVideos from "../RecommendedVideos";
+import { RWebShare } from "react-web-share";
+import { YOUTUBE_POPULAR_VIDEO_API, YOUTUBE_VIDEO_DETAILS_API } from "../../utils/data/youtube-api";
 
 const Watch = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const data = location.state;
+  const searchParamsId = searchParams.get("v");
+  const [videoDetails1, setVideoDetails1] = useState([]);
+  const [videoDetails2, setVideoDetails2] = useState([]);
 
-  const { info, videoDetails } = data;
-  const { snippet, id } = info;
-  const { contentDetails, statistics } = videoDetails;
+  useEffect(() => {
+    const getVideoDetails = async () => {
+      const res = await fetch(YOUTUBE_VIDEO_DETAILS_API(searchParamsId));
+      const data = await res.json();
+      setVideoDetails1(data?.items?.[0])
+    };
+    const getDataHandler = async () => {
+      const data = await fetch(YOUTUBE_POPULAR_VIDEO_API);
+      const json = await data.json();
+      const videoList = json?.items
+      const filterVideoById = videoList.find((item) => item.id === searchParamsId)
+      setVideoDetails2(filterVideoById);
+    };
 
-  const { duration } = contentDetails;
-  const { channelTitle, description, publishedAt, tags, title } = snippet;
+    getDataHandler();
+    getVideoDetails();
+  }, []);
+
+
+
+  const { contentDetails, statistics } = videoDetails1 ?? {}
+  const { duration } = contentDetails ?? {};
+
+  const { snippet, id } = videoDetails2 ?? {};
+  const { channelTitle, description, publishedAt, tags, title } = snippet ?? {};
   const { commentCount, favouriteCount, likeCount, viewCount, dislikeCount } =
-    statistics;
-  const video_id = id?.videoId || id;
+    statistics ?? {};
 
   const isLiked = useSelector((store) => store.likeDislike.isLiked);
   const likeCountStore = useSelector((store) => store.likeDislike.likeCount);
   const isDisliked = useSelector((store) => store.likeDislike.isDisliked);
+
 
   useEffect(() => {
     dispatch(closeMenu());
@@ -97,12 +119,20 @@ const Watch = () => {
               </div>
             </div>
 
+            <RWebShare
+              data={{
+                text: "Shop Now on Booklet",
+                url: "https://namaste-you-tube.web.app/watch?v=" + searchParamsId ,
+                title: title,
+              }}
+            >
             <div className="flex items-center rounded-full py-2 bg-gray-100">
               <div className=" py-1 px-7 max-sm:px-3 flex items-center gap-3">
                 <i className="fa-solid fa-share fa-xl"></i>
                 <h3 className="text-md max-sm:text-sm">Share</h3>
               </div>
             </div>
+            </RWebShare>
 
             <div className="flex items-center rounded-full py-2 bg-gray-100">
               <div className=" py-1 px-7 max-sm:px-3 flex items-center gap-3">
@@ -117,12 +147,12 @@ const Watch = () => {
           <LoadMoreCard
             viewCount={viewCount}
             publishedAt={publishedAt}
-            description={description}
+            description={description ?? ''}
           />
         </div>
 
         <div>
-          <CommentContainer commentCount={commentCount} videoID={video_id} />
+          <CommentContainer commentCount={commentCount} videoID={searchParamsId } />
         </div>
       </div>
 
