@@ -19,7 +19,7 @@ const LiveChat = () => {
     }, 500);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

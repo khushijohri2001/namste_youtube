@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { YOUTUBE_CATEGORY_VIDEO_API } from '../utils/data/youtube-api';
-import { useDispatch } from 'react-redux';
-import { allFilterVideosHandler } from '../redux/videoSlice';
 import VideoCard from './VideoCard';
 
 const RecommendedVideos = ({searchKeyword}) => {
@@ -9,7 +7,7 @@ const RecommendedVideos = ({searchKeyword}) => {
 
   useEffect(() => {
     getVideosByCategory(searchKeyword)
-  }, [])
+  }, [searchKeyword])
   
 
     const getVideosByCategory = async(searchKeyword) => {

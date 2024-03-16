@@ -95,9 +95,9 @@ const CommentList = ({ comment}) => {
     <div key={data.id}>
       <Comment data={data} />
 
-      {/* N level nested comment thread... Add replies
+      {/* N level nested comment thread... Add replies */}
       
-      <div className="ml-8 pl-1 border border-black border-t-0 border-l-2 border-r-0 border-b-0">
+      {/* <div className="ml-8 pl-1 border border-black border-t-0 border-l-2 border-r-0 border-b-0">
         <CommentList comment={data.replies} />
       </div> */}
     </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import VideoCard from "./VideoCard";
 import { YOUTUBE_POPULAR_VIDEO_API } from "../utils/data/youtube-api";
 import Shimmer from "./Shimmer";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { allFilterVideosHandler, allVideosHandler } from "../redux/videoSlice";
 
@@ -10,8 +9,6 @@ const VideoContainer = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   
-
-  // const activeButton  = useSelector((store) => store.buttonFilter.activeButton);
   const allVideos = useSelector((store) => store.videos.allVideos);
   const allFilterVideos = useSelector((store) => store.videos.allFilterVideos);
   
@@ -30,7 +27,7 @@ const VideoContainer = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

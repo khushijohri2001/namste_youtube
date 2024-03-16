@@ -5,7 +5,6 @@ import store from "./redux/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Watch from "./components/routes/Watch";
 import MainContainer from "./components/MainContainer";
-import RequireAuth from "./components/RequireAuth";
 import UpdateSoon from "./components/routes/UpdateSoon";
 
 const appRouter = createBrowserRouter([

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import {useSearchParams } from "react-router-dom";
 import CommentContainer from "../CommentContainer";
 import LiveChat from "../LiveChat";
 import LoadMoreCard from "../ReadMoreCard";
 import { closeMenu } from "../../redux/sideSlice";
 import numeral from "numeral";
-import { dislikeCountHandler, dislikeToggle, likeCountHandler, likeToggle } from "../../redux/likeDislikeSlice";
+import {dislikeToggle, likeCountHandler, likeToggle } from "../../redux/likeDislikeSlice";
 import RecommendedVideos from "../RecommendedVideos";
 import { RWebShare } from "react-web-share";
 import { YOUTUBE_POPULAR_VIDEO_API, YOUTUBE_VIDEO_DETAILS_API } from "../../utils/data/youtube-api";
@@ -34,7 +34,7 @@ const Watch = () => {
 
     getDataHandler();
     getVideoDetails();
-  }, []);
+  }, [searchParamsId]);
 
 
 

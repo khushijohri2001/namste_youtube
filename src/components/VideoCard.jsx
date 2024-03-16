@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { YOUTUBE_COMMENT_THREAD_API, YOUTUBE_VIDEO_DETAILS_API } from "../utils/data/youtube-api";
+import { YOUTUBE_VIDEO_DETAILS_API } from "../utils/data/youtube-api";
 import { Link } from "react-router-dom";
 
 const VideoCard = ({ info }) => {
@@ -25,7 +25,7 @@ const VideoCard = ({ info }) => {
       setViewCount(data?.items[0]?.statistics?.viewCount);
     };
     getVideoDetails();
-  }, []);
+  }, [video_id]);
 
   
   return (

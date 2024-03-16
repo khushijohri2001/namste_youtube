@@ -10,7 +10,7 @@ const MainContainer = () => {
 
   useEffect(() => {
     dispatch(openMenu());
-  }, []);
+  }, [dispatch]);
   
   return (
     <div className={`${isMenuOpen && "flex-[0.85]"} max-sm:${isMenuOpen && "flex-1"}  px-6 pt-8 `}>

@@ -7,7 +7,6 @@ const ReadMoreCard = ({viewCount, publishedAt, description}) => {
     setIsReadMore(false)
   }, [])
 
-  console.log(description.length);
 
   return (
     <div className='w-half bg-gray-100 my-8 p-3 rounded-xl'>
