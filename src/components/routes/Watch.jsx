@@ -56,11 +56,11 @@ const Watch = () => {
   });
 
   return (
-    <div className="flex gap-8 mt-8 px-4 max-sm:flex-col max-sm:items-center ">
-      <div className="w-full max-sm:w-[350px]">
+    <div className="flex gap-8 mt-8 px-4 max-sm:flex-col max-sm:items-center max-sm:px-2">
+      <div className="w-full max-sm:w-auto">
         <div>
           <iframe
-            className="w-[960px] h-[520px] max-sm:w-[350px] max-sm:h-[200px]"
+            className="w-[960px] h-[520px] max-sm:w-full max-sm:h-[40vh] rounded-md"
             src={"https://www.youtube.com/embed/" + searchParams.get("v")}
             title="YouTube video player"
             frameBorder="0"
@@ -121,7 +121,7 @@ const Watch = () => {
 
             <RWebShare
               data={{
-                text: "Shop Now on Booklet",
+                text: "Watch on Namaste Youtube",
                 url: "https://namaste-you-tube.web.app/watch?v=" + searchParamsId ,
                 title: title,
               }}

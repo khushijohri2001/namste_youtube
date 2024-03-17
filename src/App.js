@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Watch from "./components/routes/Watch";
 import MainContainer from "./components/MainContainer";
 import UpdateSoon from "./components/routes/UpdateSoon";
+import PrivacyPolicy from "./components/routes/PrivacyPolicy";
 
 const appRouter = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const appRouter = createBrowserRouter([
         path: "/userProfile",
         element: <UpdateSoon/>
       },
+      {
+        path: "/privacy-policy",
+        element:<PrivacyPolicy/>
+      }
     ]
   },
   {

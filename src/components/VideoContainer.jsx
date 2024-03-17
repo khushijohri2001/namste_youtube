@@ -18,9 +18,11 @@ const VideoContainer = () => {
       const getDataHandler = async () => {
         const data = await fetch(YOUTUBE_POPULAR_VIDEO_API);
         const json = await data.json();
+        console.log(json);
         dispatch(allVideosHandler(json.items));
         dispatch(allFilterVideosHandler(json.items));
         setLoading(false);
+       
       };
 
       getDataHandler();
@@ -28,6 +30,8 @@ const VideoContainer = () => {
       console.log(error);
     }
   }, [dispatch]);
+
+  
 
   return (
     <div>

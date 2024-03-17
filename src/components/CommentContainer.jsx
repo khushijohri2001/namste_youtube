@@ -70,7 +70,7 @@ const Comment = ({ data }) => {
   const {id, snippet:{topLevelComment: {snippet: {authorDisplayName, authorProfileImageUrl, textOriginal }}}} = data;
 
   return (
-    <div className="p-3 flex items-start gap-3 border border-gray-200 rounded-lg m-3">
+    <div className="p-3 flex items-start gap-3 border border-gray-200 rounded-lg m-3 w-auto break-all">
       <button className=" border border-black rounded-3xl min-h-[2rem] min-w-[2rem] h-8 w-8">
         <img
           src={authorProfileImageUrl}
@@ -116,9 +116,10 @@ const CommentContainer = ({commentCount, videoID}) => {
     }
 getCommentThread()
   }, [])
+
   return (
     <div>
-      <div className="text-xl font-bold mt-5"> {commentCount} Comments </div>
+      <div className="text-xl font-bold mt-5 w-auto"> {commentCount} Comments </div>
       <CommentList comment={commentThreads} />
     </div>
   );

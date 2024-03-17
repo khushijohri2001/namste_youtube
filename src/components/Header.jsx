@@ -33,7 +33,7 @@ const Header = () => {
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, searchCache]);
+  }, [searchQuery]);
 
   const fetchSuggestionsHandler = async () => {
     const response = await fetch(YOUTUBE_SUGGESTION_API + searchQuery);
@@ -103,7 +103,7 @@ const Header = () => {
           <input
             type="text"
             value={searchQuery}
-            className="border border-gray-600 w-[33rem] flex-1 p-1 px-4 h-11 rounded-l-3xl max-lg:w-96 max-sm:w-48"
+            className="border border-gray-600 w-[33rem] flex-1 p-1 px-4 h-11 rounded-l-3xl max-lg:w-96 max-sm:w-44 max-sm:pr-2"
             onFocus={() => setIsSuggestionOpen(true)}
             onChange={(event) => setSearchQuery(event.target.value)}
           />

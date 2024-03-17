@@ -1,35 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { YOUTUBE_VIDEO_DETAILS_API } from "../utils/data/youtube-api";
+import { YOUTUBE_CHANNEL_API, YOUTUBE_VIDEO_DETAILS_API } from "../utils/data/youtube-api";
 import { Link } from "react-router-dom";
+import Shimmer from "./Shimmer";
 
 const VideoCard = ({ info }) => {
   const [videoDetails, setVideoDetails] = useState([]);
   const [viewCount, setViewCount] = useState();
+  const [channelInfo, setChannelInfo] = useState([])
   const isMenuOpen = useSelector((store) => store.menu.isMenuOpen);
-  
+  const [isLoading, setIsLoading] = useState(true)
 
-
-  const { snippet, id } = info;
-  const { title, channelTitle, thumbnails, liveBroadcastContent } = snippet;
-
+  const { snippet:{channelId, title, channelTitle, thumbnails, liveBroadcastContent}, id } = info;
   const video_id = id?.videoId || id;
 
   // const {viewCount, likeCount, commentCount} = statistics;
 
+  // useEffect(() => {
+  //   const getVideoDetails = async () => {
+  //     const res = await fetch(YOUTUBE_VIDEO_DETAILS_API(video_id));
+  //     const data = await res.json();
+  //     setVideoDetails(data?.items[0]);
+  //     setViewCount(data?.items[0]?.statistics?.viewCount);
+  //   };
+  //   getVideoDetails();
+    
+  // }, [video_id]);
+
   useEffect(() => {
-    const getVideoDetails = async () => {
-      const res = await fetch(YOUTUBE_VIDEO_DETAILS_API(video_id));
-      const data = await res.json();
-      setVideoDetails(data?.items[0]);
-      setViewCount(data?.items[0]?.statistics?.viewCount);
-    };
-    getVideoDetails();
-  }, [video_id]);
+    try{
+    const getChannelDetails =  async() =>{
+      const res = await fetch(YOUTUBE_CHANNEL_API(channelId))
+      const json = await res.json()
+      setChannelInfo(json?.items[0]?.snippet?.thumbnails?.default);
+      setIsLoading(false)
+    }
+    getChannelDetails()
+    } catch(error){
+      console.log(error);
+    }
+  }, [])
+
 
   
   return (
-    <Link
+    <>
+     {isLoading ? (
+      <Shimmer/>
+     ) : (
+      <Link
       key={video_id}
       to={"/watch?v=" + video_id}
       state={{ info: info, videoDetails: videoDetails }}
@@ -46,8 +65,14 @@ const VideoCard = ({ info }) => {
           src={thumbnails.medium.url}
           alt={title}
         />
-        <div>
-          <div></div>
+        <div className="flex gap-2 mt-2">
+          <div className="">
+                <img
+                  src={channelInfo?.url}
+                  alt="user icon"
+                  className="w-12 h-12 object-cover rounded-full"
+                />
+          </div>
           <div>
             <h3 className="font-bold text-lg max-sm:text-sm line-clamp-1">
               {title}
@@ -56,12 +81,14 @@ const VideoCard = ({ info }) => {
             <p className="text-md font-medium text-red-600">
               {!liveBroadcastContent === "none" && liveBroadcastContent}
             </p>
-            <p></p>
+            <p className="text-md font-medium text-gray-600">{viewCount} views</p>
           </div>
         </div>
-        <p className="text-md font-medium text-gray-600">{viewCount} views</p>
+        
       </div>
     </Link>
+     )}
+    </>
   );
 };
 
