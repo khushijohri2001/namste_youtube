@@ -1,17 +1,20 @@
+import React, { Suspense, lazy } from 'react'
 import { Provider } from "react-redux";
 import "./App.css";
-import Body from "./components/Body";
 import store from "./redux/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Watch from "./components/routes/Watch";
+import Body from "./components/Body";
 import MainContainer from "./components/MainContainer";
-import UpdateSoon from "./components/routes/UpdateSoon";
-import PrivacyPolicy from "./components/routes/PrivacyPolicy";
+import Shimmer from './components/Shimmer';
+
+const Watch = lazy(() => import("./components/routes/Watch"))
+const UpdateSoon = lazy(() => import("./components/routes/UpdateSoon"))
+const PrivacyPolicy = lazy(() => import("./components/routes/PrivacyPolicy"))
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Body />,
+    element: <Suspense fallback={<Shimmer/>}><Body /></Suspense>,
     children: [
       {
         path: "/",

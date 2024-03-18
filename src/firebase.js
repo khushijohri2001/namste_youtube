@@ -5,13 +5,13 @@ import { getAuth } from "firebase/auth";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyADTsYEt7w_nh8Ct4JScnso4HoQhSw2KRE",
-  authDomain: "namaste-you-tube.firebaseapp.com",
-  projectId: "namaste-you-tube",
-  storageBucket: "namaste-you-tube.appspot.com",
-  messagingSenderId: "239024009434",
-  appId: "1:239024009434:web:89f5f518bbd355ee02f5e3",
-  measurementId: "G-B79F2RR7DR"
+  apiKey: "AIzaSyAfEZgKxK8RyNZ2GeP4qIrcRqksdHJ2sMA",
+  authDomain: "play-lyst.firebaseapp.com",
+  projectId: "play-lyst",
+  storageBucket: "play-lyst.appspot.com",
+  messagingSenderId: "978014552981",
+  appId: "1:978014552981:web:c9a424d487a1d96a712c9c",
+  measurementId: "G-PSLRK3BRY6"
 };
 
 // Initialize Firebase

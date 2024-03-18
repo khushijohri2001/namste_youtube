@@ -9,63 +9,44 @@ import numeral from "numeral";
 import {dislikeToggle, likeCountHandler, likeToggle } from "../../redux/likeDislikeSlice";
 import RecommendedVideos from "../RecommendedVideos";
 import { RWebShare } from "react-web-share";
-import { YOUTUBE_POPULAR_VIDEO_API, YOUTUBE_VIDEO_DETAILS_API } from "../../utils/data/youtube-api";
+import { YOUTUBE_VIDEO_DETAILS_API_BY_ID } from "../../utils/data/youtube-api";
 
 const Watch = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const searchParamsId = searchParams.get("v");
-  const [videoDetails1, setVideoDetails1] = useState([]);
-  const [videoDetails2, setVideoDetails2] = useState([]);
-
-  useEffect(() => {
-    const getVideoDetails = async () => {
-      const res = await fetch(YOUTUBE_VIDEO_DETAILS_API(searchParamsId));
-      const data = await res.json();
-      setVideoDetails1(data?.items?.[0])
-    };
-    const getDataHandler = async () => {
-      const data = await fetch(YOUTUBE_POPULAR_VIDEO_API);
-      const json = await data.json();
-      const videoList = json?.items
-      const filterVideoById = videoList.find((item) => item.id === searchParamsId)
-      setVideoDetails2(filterVideoById);
-    };
-
-    getDataHandler();
-    getVideoDetails();
-  }, [searchParamsId]);
-
-
-
-  const { contentDetails, statistics } = videoDetails1 ?? {}
-  const { duration } = contentDetails ?? {};
-
-  const { snippet, id } = videoDetails2 ?? {};
-  const { channelTitle, description, publishedAt, tags, title } = snippet ?? {};
-  const { commentCount, favouriteCount, likeCount, viewCount, dislikeCount } =
-    statistics ?? {};
-
-  const isLiked = useSelector((store) => store.likeDislike.isLiked);
-  const likeCountStore = useSelector((store) => store.likeDislike.likeCount);
-  const isDisliked = useSelector((store) => store.likeDislike.isDisliked);
-
+  const [videoDetails, setVideoDetails] = useState([]);
 
   useEffect(() => {
     dispatch(closeMenu());
   });
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await fetch(YOUTUBE_VIDEO_DETAILS_API_BY_ID(searchParamsId));
+      const data = await res.json();
+      setVideoDetails(data?.items?.[0])
+    })()
+  }, [searchParamsId]);
+
+  const { contentDetails, statistics, snippet } = videoDetails ?? {}
+  const { commentCount, favouriteCount, likeCount, viewCount, dislikeCount } = statistics ?? {}
+  const { channelTitle, description, publishedAt, tags, title } = snippet ?? {}
+
+  const {isLiked, likeCountStore, isDisliked} = useSelector((store) => store.likeDislike);
 
   return (
     <div className="flex gap-8 mt-8 px-4 max-sm:flex-col max-sm:items-center max-sm:px-2">
       <div className="w-full max-sm:w-auto">
         <div>
           <iframe
-            className="w-[960px] h-[520px] max-sm:w-full max-sm:h-[40vh] rounded-md"
+            className="w-[65vw] h-[65vh] max-sm:w-full max-sm:h-[40vh] rounded-md"
             src={"https://www.youtube.com/embed/" + searchParams.get("v")}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            loading="lazy"
           ></iframe>
         </div>
         <div>
@@ -80,6 +61,7 @@ const Watch = () => {
                   src="https://cdn-icons-png.flaticon.com/512/709/709722.png"
                   alt="user icon"
                   className="h-7 "
+                  loading="lazy"
                 />
               </button>
               <div>
@@ -121,8 +103,8 @@ const Watch = () => {
 
             <RWebShare
               data={{
-                text: "Watch on Namaste Youtube",
-                url: "https://namaste-you-tube.web.app/watch?v=" + searchParamsId ,
+                text: "Watch on Playlyst",
+                url: "https://play-lyst.web.app/watch?v=" + searchParamsId ,
                 title: title,
               }}
             >

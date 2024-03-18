@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { closeMenu } from "../../redux/sideSlice";
 
 const PrivacyPolicy = () => {
+    const dispatch=useDispatch()
+
+    useEffect(() => {
+        dispatch(closeMenu());
+      });
+      
   return (
     <div className="flex flex-col gap-6 px-32 py-10 max-sm:py-8 max-sm:px-6">
       <p>

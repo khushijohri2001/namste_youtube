@@ -16,6 +16,8 @@ const RecommendedVideos = ({searchKeyword}) => {
        setRecommendedVideoList(data.items);
       }
 
+      console.log(recommendedVideoList);
+
   return (
     <div className='w-full mt-8'>
         <div className="flex-col space-y-6">

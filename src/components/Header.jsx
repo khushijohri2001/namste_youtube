@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { menuToggle } from "../redux/sideSlice";
-import {
-  YOUTUBE_CATEGORY_VIDEO_API,
-  YOUTUBE_SUGGESTION_API,
-} from "../utils/data/youtube-api";
+import { YOUTUBE_CATEGORY_VIDEO_API, YOUTUBE_SUGGESTION_API} from "../utils/data/youtube-api";
 import { cacheResult } from "../redux/searchSlice";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { searchFilterData } from "../utils/functions/searchFilterData";
 import { allFilterVideosHandler } from "../redux/videoSlice";
+import { createIcon, hamburgerIcon, logo, notificationIcon, speechIcon, userIcon } from "../assets/image-constant";
 
 const Header = () => {
   const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestionList, setSuggestionList] = useState([]);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const searchCache = useSelector((store) => store.search);
@@ -30,7 +29,7 @@ const Header = () => {
       if (searchQuery === "") {
         fetchSuggestionsHandler();
       }
-    }, 200);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -47,15 +46,9 @@ const Header = () => {
     );
   };
 
-  const menuToggleHandler = () => {
-    dispatch(menuToggle());
-  };
-
-  const handleBlur = () => setIsSuggestionOpen(false);
-
   const suggestionClickHandler = (suggestion) => {
     setSearchQuery(suggestion);
-    handleBlur();
+    setIsSuggestionOpen(false)
   };
 
   const getVideosByCategory = async (activeButton) => {
@@ -65,6 +58,7 @@ const Header = () => {
   };
 
   const searchHandler = (searchQuery) => {
+    navigate("/")
     const data = searchFilterData(searchQuery, allVideos);
     if (data.length === 0) {
       getVideosByCategory(searchQuery);
@@ -72,22 +66,25 @@ const Header = () => {
       dispatch(allFilterVideosHandler(data));
     }
     setIsSuggestionOpen(false);
+   
   };
 
   return (
-    <div className=" sticky top-0 bg-white  flex gap-3 justify-between shadow-md p-4 items-center z-50">
-      <div className=" flex gap-5 max-sm:gap-0">
+    <div className="sticky top-0 bg-white  flex gap-3 justify-between shadow-md p-4 items-center z-50">
+      <div className="flex gap-5 max-sm:gap-0">
         <img
-          src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-5.png"
+          src={hamburgerIcon}
           alt="hamburger"
-          className="h-8 "
-          onClick={() => menuToggleHandler()}
+          className="h-8"
+          onClick={() => dispatch(menuToggle())}
+          loading="lazy"
         />
         <Link to="/">
           <img
-            src="https://www.edigitalagency.com.au/wp-content/uploads/Youtube-logo-png.png"
+            src={logo}
             alt="logo"
             className="h-8 max-md:hidden"
+            loading="lazy"
           />
         </Link>
       </div>
@@ -133,9 +130,10 @@ const Header = () => {
         </button>
         <button className="bg-gray-300 border p-2 ml-5 max-sm:ml-2 rounded-3xl">
           <img
-            src="https://www.iconpacks.net/icons/1/free-microphone-icon-342-thumb.png"
+            src={speechIcon}
             alt="speak"
-            className="h-6 "
+            className="h-6"
+            loading="lazy"
           />
         </button>
       </div>
@@ -143,25 +141,28 @@ const Header = () => {
       <div className=" flex gap-3">
         <button className=" p-1 max-sm:hidden">
           <img
-            src="https://www.nicepng.com/png/detail/202-2022683_edit-svg-png-icon-free-download-create-icon.png"
+            src={createIcon}
             alt="create"
-            className="h-7 "
+            className="h-7"
+            loading="lazy"
           />
         </button>
         <button className="p-1 max-sm:hidden">
           <img
-            src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-512.png"
+            src={notificationIcon}
             alt="notification"
-            className="h-7 w-auto "
+            className="h-7 w-auto"
+            loading="lazy"
           />
         </button>
 
         <Link to="/login">
           <button className="p-2 border-2 border-black rounded-3xl">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/709/709722.png"
+              src={userIcon}
               alt="user icon"
               className="h-5"
+              loading="lazy"
             />
           </button>
         </Link>
